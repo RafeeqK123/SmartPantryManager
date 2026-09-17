@@ -9,10 +9,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PantryDatabaseHelper extends SQLiteOpenHelper {
+public class PantryDatabaseHelper
+        extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME =
             "smart_pantry.db";
+
     private static final int DATABASE_VERSION = 1;
 
     public static final String TABLE_INGREDIENTS =
@@ -20,8 +22,12 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_QUANTITY = "quantity";
+
+    public static final String COLUMN_QUANTITY =
+            "quantity";
+
     public static final String COLUMN_UNIT = "unit";
+
     public static final String COLUMN_EXPIRY_DATE =
             "expiry_date";
 
@@ -35,18 +41,28 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase database) {
+    public void onCreate(
+            SQLiteDatabase database
+    ) {
         String createIngredientsTable =
-                "CREATE TABLE " + TABLE_INGREDIENTS + " (" +
+                "CREATE TABLE " +
+                        TABLE_INGREDIENTS +
+                        " (" +
                         COLUMN_ID +
                         " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        COLUMN_NAME + " TEXT NOT NULL, " +
-                        COLUMN_QUANTITY + " REAL NOT NULL, " +
-                        COLUMN_UNIT + " TEXT NOT NULL, " +
-                        COLUMN_EXPIRY_DATE + " TEXT" +
+                        COLUMN_NAME +
+                        " TEXT NOT NULL, " +
+                        COLUMN_QUANTITY +
+                        " REAL NOT NULL, " +
+                        COLUMN_UNIT +
+                        " TEXT NOT NULL, " +
+                        COLUMN_EXPIRY_DATE +
+                        " TEXT" +
                         ")";
 
-        database.execSQL(createIngredientsTable);
+        database.execSQL(
+                createIngredientsTable
+        );
     }
 
     @Override
@@ -63,12 +79,16 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
         onCreate(database);
     }
 
-    public long addIngredient(Ingredient ingredient) {
+    public long addIngredient(
+            Ingredient ingredient
+    ) {
         SQLiteDatabase database =
                 getWritableDatabase();
 
         ContentValues values =
-                createIngredientValues(ingredient);
+                createIngredientValues(
+                        ingredient
+                );
 
         return database.insert(
                 TABLE_INGREDIENTS,
@@ -91,13 +111,16 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
                 null,
                 null,
                 null,
-                COLUMN_NAME + " COLLATE NOCASE ASC"
+                COLUMN_NAME +
+                        " COLLATE NOCASE ASC"
         );
 
         try {
             while (cursor.moveToNext()) {
                 ingredients.add(
-                        createIngredientFromCursor(cursor)
+                        createIngredientFromCursor(
+                                cursor
+                        )
                 );
             }
         } finally {
@@ -107,24 +130,32 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
         return ingredients;
     }
 
-    public int updateIngredient(Ingredient ingredient) {
+    public int updateIngredient(
+            Ingredient ingredient
+    ) {
         SQLiteDatabase database =
                 getWritableDatabase();
 
         ContentValues values =
-                createIngredientValues(ingredient);
+                createIngredientValues(
+                        ingredient
+                );
 
         return database.update(
                 TABLE_INGREDIENTS,
                 values,
                 COLUMN_ID + " = ?",
                 new String[]{
-                        String.valueOf(ingredient.getId())
+                        String.valueOf(
+                                ingredient.getId()
+                        )
                 }
         );
     }
 
-    public int deleteIngredient(long ingredientId) {
+    public int deleteIngredient(
+            long ingredientId
+    ) {
         SQLiteDatabase database =
                 getWritableDatabase();
 
@@ -132,28 +163,45 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
                 TABLE_INGREDIENTS,
                 COLUMN_ID + " = ?",
                 new String[]{
-                        String.valueOf(ingredientId)
+                        String.valueOf(
+                                ingredientId
+                        )
                 }
+        );
+    }
+
+    public int deleteAllIngredients() {
+        SQLiteDatabase database =
+                getWritableDatabase();
+
+        return database.delete(
+                TABLE_INGREDIENTS,
+                null,
+                null
         );
     }
 
     private ContentValues createIngredientValues(
             Ingredient ingredient
     ) {
-        ContentValues values = new ContentValues();
+        ContentValues values =
+                new ContentValues();
 
         values.put(
                 COLUMN_NAME,
                 ingredient.getName()
         );
+
         values.put(
                 COLUMN_QUANTITY,
                 ingredient.getQuantity()
         );
+
         values.put(
                 COLUMN_UNIT,
                 ingredient.getUnit()
         );
+
         values.put(
                 COLUMN_EXPIRY_DATE,
                 ingredient.getExpiryDate()
@@ -166,11 +214,15 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
             Cursor cursor
     ) {
         long id = cursor.getLong(
-                cursor.getColumnIndexOrThrow(COLUMN_ID)
+                cursor.getColumnIndexOrThrow(
+                        COLUMN_ID
+                )
         );
 
         String name = cursor.getString(
-                cursor.getColumnIndexOrThrow(COLUMN_NAME)
+                cursor.getColumnIndexOrThrow(
+                        COLUMN_NAME
+                )
         );
 
         double quantity = cursor.getDouble(
@@ -180,7 +232,9 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
         );
 
         String unit = cursor.getString(
-                cursor.getColumnIndexOrThrow(COLUMN_UNIT)
+                cursor.getColumnIndexOrThrow(
+                        COLUMN_UNIT
+                )
         );
 
         String expiryDate = cursor.getString(
