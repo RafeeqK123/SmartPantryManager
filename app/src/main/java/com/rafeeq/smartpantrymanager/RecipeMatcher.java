@@ -44,7 +44,8 @@ public class RecipeMatcher {
                             required.getUnit()
                     );
 
-            if (availableQuantity < requiredQuantity) {
+            if (availableQuantity <
+                    requiredQuantity) {
                 return false;
             }
         }
@@ -64,10 +65,18 @@ public class RecipeMatcher {
                 );
 
         String requiredUnitType =
-                getUnitType(required.getUnit());
+                getUnitType(
+                        required.getUnit()
+                );
 
         for (Ingredient pantryItem :
                 pantryIngredients) {
+
+            if (ExpiryDateUtils.isExpired(
+                    pantryItem.getExpiryDate()
+            )) {
+                continue;
+            }
 
             String pantryName =
                     normaliseIngredientName(
@@ -80,7 +89,9 @@ public class RecipeMatcher {
                     );
 
             boolean namesMatch =
-                    requiredName.equals(pantryName);
+                    requiredName.equals(
+                            pantryName
+                    );
 
             boolean unitsMatch =
                     requiredUnitType.equals(

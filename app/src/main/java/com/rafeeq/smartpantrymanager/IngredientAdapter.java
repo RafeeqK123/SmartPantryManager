@@ -1,5 +1,6 @@
 package com.rafeeq.smartpantrymanager;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientAdapter
-        extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
+        extends RecyclerView.Adapter<
+        IngredientAdapter.IngredientViewHolder> {
 
     public interface IngredientActionListener {
-        void onEditIngredient(Ingredient ingredient);
+        void onEditIngredient(
+                Ingredient ingredient
+        );
 
-        void onDeleteIngredient(Ingredient ingredient);
+        void onDeleteIngredient(
+                Ingredient ingredient
+        );
     }
 
     private final List<Ingredient> ingredients =
@@ -48,7 +54,9 @@ public class IngredientAdapter
                         false
                 );
 
-        return new IngredientViewHolder(itemView);
+        return new IngredientViewHolder(
+                itemView
+        );
     }
 
     @Override
@@ -88,6 +96,8 @@ public class IngredientAdapter
         private final MaterialButton buttonEdit;
         private final MaterialButton buttonDelete;
 
+        private final int normalExpiryTextColour;
+
         IngredientViewHolder(
                 @NonNull View itemView
         ) {
@@ -112,13 +122,18 @@ public class IngredientAdapter
             buttonDelete = itemView.findViewById(
                     R.id.buttonDeleteIngredient
             );
+
+            normalExpiryTextColour =
+                    textExpiry.getCurrentTextColor();
         }
 
         void bind(
                 Ingredient ingredient,
                 IngredientActionListener actionListener
         ) {
-            textName.setText(ingredient.getName());
+            textName.setText(
+                    ingredient.getName()
+            );
 
             DecimalFormat quantityFormat =
                     new DecimalFormat("0.##");
@@ -133,29 +148,62 @@ public class IngredientAdapter
 
             textQuantity.setText(quantityText);
 
+            displayExpiryDate(ingredient);
+
+            buttonEdit.setOnClickListener(
+                    view -> actionListener
+                            .onEditIngredient(
+                                    ingredient
+                            )
+            );
+
+            buttonDelete.setOnClickListener(
+                    view -> actionListener
+                            .onDeleteIngredient(
+                                    ingredient
+                            )
+            );
+        }
+
+        private void displayExpiryDate(
+                Ingredient ingredient
+        ) {
             String expiryDate =
                     ingredient.getExpiryDate();
 
             if (expiryDate == null ||
                     expiryDate.isEmpty()) {
+
                 textExpiry.setText(
                         "Expiry date: Not provided"
+                );
+
+                textExpiry.setTextColor(
+                        normalExpiryTextColour
+                );
+
+                return;
+            }
+
+            if (ExpiryDateUtils.isExpired(
+                    expiryDate
+            )) {
+                textExpiry.setText(
+                        "Expired: " + expiryDate
+                );
+
+                textExpiry.setTextColor(
+                        Color.rgb(179, 38, 30)
                 );
             } else {
                 textExpiry.setText(
                         "Expiry date: " + expiryDate
                 );
+
+                textExpiry.setTextColor(
+                        normalExpiryTextColour
+                );
             }
-
-            buttonEdit.setOnClickListener(
-                    view -> actionListener
-                            .onEditIngredient(ingredient)
-            );
-
-            buttonDelete.setOnClickListener(
-                    view -> actionListener
-                            .onDeleteIngredient(ingredient)
-            );
         }
     }
 }
