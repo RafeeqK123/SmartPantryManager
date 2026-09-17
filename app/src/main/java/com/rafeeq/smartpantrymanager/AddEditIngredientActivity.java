@@ -18,7 +18,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class AddEditIngredientActivity extends AppCompatActivity {
+public class AddEditIngredientActivity
+        extends AppCompatActivity {
 
     private TextInputLayout layoutIngredientName;
     private TextInputLayout layoutQuantity;
@@ -29,13 +30,24 @@ public class AddEditIngredientActivity extends AppCompatActivity {
     private TextInputEditText editUnit;
     private TextInputEditText editExpiryDate;
 
+    private MaterialToolbar toolbar;
+    private MaterialButton saveButton;
+
     private PantryDatabaseHelper databaseHelper;
 
+    private long ingredientId = -1;
+    private boolean isEditMode = false;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(
+            Bundle savedInstanceState
+    ) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_add_edit_ingredient);
+
+        setContentView(
+                R.layout.activity_add_edit_ingredient
+        );
 
         databaseHelper =
                 new PantryDatabaseHelper(this);
@@ -58,28 +70,105 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 }
         );
 
-        MaterialToolbar toolbar =
+        findViews();
+        configureScreen();
+        configureListeners();
+    }
+
+    private void findViews() {
+        toolbar =
                 findViewById(R.id.toolbar);
 
-        MaterialButton saveButton =
-                findViewById(R.id.buttonSaveIngredient);
+        saveButton =
+                findViewById(
+                        R.id.buttonSaveIngredient
+                );
 
         layoutIngredientName =
-                findViewById(R.id.layoutIngredientName);
+                findViewById(
+                        R.id.layoutIngredientName
+                );
+
         layoutQuantity =
-                findViewById(R.id.layoutQuantity);
+                findViewById(
+                        R.id.layoutQuantity
+                );
+
         layoutUnit =
-                findViewById(R.id.layoutUnit);
+                findViewById(
+                        R.id.layoutUnit
+                );
 
         editIngredientName =
-                findViewById(R.id.editIngredientName);
-        editQuantity =
-                findViewById(R.id.editQuantity);
-        editUnit =
-                findViewById(R.id.editUnit);
-        editExpiryDate =
-                findViewById(R.id.editExpiryDate);
+                findViewById(
+                        R.id.editIngredientName
+                );
 
+        editQuantity =
+                findViewById(
+                        R.id.editQuantity
+                );
+
+        editUnit =
+                findViewById(
+                        R.id.editUnit
+                );
+
+        editExpiryDate =
+                findViewById(
+                        R.id.editExpiryDate
+                );
+    }
+
+    private void configureScreen() {
+        if (getIntent().hasExtra("ingredient_id")) {
+            isEditMode = true;
+
+            ingredientId = getIntent().getLongExtra(
+                    "ingredient_id",
+                    -1
+            );
+
+            String name = getIntent().getStringExtra(
+                    "ingredient_name"
+            );
+
+            double quantity =
+                    getIntent().getDoubleExtra(
+                            "ingredient_quantity",
+                            0
+                    );
+
+            String unit = getIntent().getStringExtra(
+                    "ingredient_unit"
+            );
+
+            String expiryDate =
+                    getIntent().getStringExtra(
+                            "ingredient_expiry"
+                    );
+
+            toolbar.setTitle("Edit Ingredient");
+            saveButton.setText("Update ingredient");
+
+            editIngredientName.setText(name);
+
+            editQuantity.setText(
+                    formatQuantity(quantity)
+            );
+
+            editUnit.setText(unit);
+
+            if (expiryDate != null) {
+                editExpiryDate.setText(expiryDate);
+            }
+        } else {
+            toolbar.setTitle("Add Ingredient");
+            saveButton.setText("Save ingredient");
+        }
+    }
+
+    private void configureListeners() {
         toolbar.setNavigationOnClickListener(
                 view -> finish()
         );
@@ -99,8 +188,10 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
         int year =
                 calendar.get(Calendar.YEAR);
+
         int month =
                 calendar.get(Calendar.MONTH);
+
         int day =
                 calendar.get(Calendar.DAY_OF_MONTH);
 
@@ -154,6 +245,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             layoutIngredientName.setError(
                     "Please enter an ingredient name"
             );
+
             isValid = false;
         }
 
@@ -161,22 +253,27 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             layoutQuantity.setError(
                     "Please enter a quantity"
             );
+
             isValid = false;
         } else {
             try {
                 double quantity =
-                        Double.parseDouble(quantityText);
+                        Double.parseDouble(
+                                quantityText
+                        );
 
                 if (quantity <= 0) {
                     layoutQuantity.setError(
                             "Quantity must be greater than zero"
                     );
+
                     isValid = false;
                 }
             } catch (NumberFormatException exception) {
                 layoutQuantity.setError(
                         "Please enter a valid quantity"
                 );
+
                 isValid = false;
             }
         }
@@ -185,6 +282,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             layoutUnit.setError(
                     "Please enter a unit"
             );
+
             isValid = false;
         }
 
@@ -203,12 +301,22 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                         expiryDate
                 );
 
-        long ingredientId =
+        if (isEditMode) {
+            updateIngredient(ingredient);
+        } else {
+            addIngredient(ingredient);
+        }
+    }
+
+    private void addIngredient(
+            Ingredient ingredient
+    ) {
+        long newIngredientId =
                 databaseHelper.addIngredient(
                         ingredient
                 );
 
-        if (ingredientId != -1) {
+        if (newIngredientId != -1) {
             Toast.makeText(
                     this,
                     "Ingredient saved successfully",
@@ -217,12 +325,39 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
             finish();
         } else {
+            showSaveError();
+        }
+    }
+
+    private void updateIngredient(
+            Ingredient ingredient
+    ) {
+        ingredient.setId(ingredientId);
+
+        int updatedRows =
+                databaseHelper.updateIngredient(
+                        ingredient
+                );
+
+        if (updatedRows > 0) {
             Toast.makeText(
                     this,
-                    "Unable to save ingredient",
+                    "Ingredient updated successfully",
                     Toast.LENGTH_SHORT
             ).show();
+
+            finish();
+        } else {
+            showSaveError();
         }
+    }
+
+    private void showSaveError() {
+        Toast.makeText(
+                this,
+                "Unable to save ingredient",
+                Toast.LENGTH_SHORT
+        ).show();
     }
 
     private void clearErrors() {
@@ -242,6 +377,18 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 .getText()
                 .toString()
                 .trim();
+    }
+
+    private String formatQuantity(
+            double quantity
+    ) {
+        if (quantity == Math.floor(quantity)) {
+            return String.valueOf(
+                    (long) quantity
+            );
+        }
+
+        return String.valueOf(quantity);
     }
 
     @Override
