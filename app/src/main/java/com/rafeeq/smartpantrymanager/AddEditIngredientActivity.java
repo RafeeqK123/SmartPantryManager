@@ -29,11 +29,16 @@ public class AddEditIngredientActivity extends AppCompatActivity {
     private TextInputEditText editUnit;
     private TextInputEditText editExpiryDate;
 
+    private PantryDatabaseHelper databaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_edit_ingredient);
+
+        databaseHelper =
+                new PantryDatabaseHelper(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(
                 findViewById(R.id.main),
@@ -53,7 +58,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 }
         );
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        MaterialToolbar toolbar =
+                findViewById(R.id.toolbar);
+
         MaterialButton saveButton =
                 findViewById(R.id.buttonSaveIngredient);
 
@@ -73,37 +80,50 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         editExpiryDate =
                 findViewById(R.id.editExpiryDate);
 
-        toolbar.setNavigationOnClickListener(view -> finish());
+        toolbar.setNavigationOnClickListener(
+                view -> finish()
+        );
 
         editExpiryDate.setOnClickListener(
                 view -> showDatePicker()
         );
 
-        saveButton.setOnClickListener(view -> validateForm());
+        saveButton.setOnClickListener(
+                view -> validateAndSaveIngredient()
+        );
     }
 
     private void showDatePicker() {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar =
+                Calendar.getInstance();
 
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int year =
+                calendar.get(Calendar.YEAR);
+        int month =
+                calendar.get(Calendar.MONTH);
+        int day =
+                calendar.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog datePickerDialog =
                 new DatePickerDialog(
                         this,
-                        (datePicker, selectedYear,
-                         selectedMonth, selectedDay) -> {
+                        (datePicker,
+                         selectedYear,
+                         selectedMonth,
+                         selectedDay) -> {
 
-                            String selectedDate = String.format(
-                                    Locale.getDefault(),
-                                    "%02d/%02d/%04d",
-                                    selectedDay,
-                                    selectedMonth + 1,
-                                    selectedYear
+                            String selectedDate =
+                                    String.format(
+                                            Locale.getDefault(),
+                                            "%02d/%02d/%04d",
+                                            selectedDay,
+                                            selectedMonth + 1,
+                                            selectedYear
+                                    );
+
+                            editExpiryDate.setText(
+                                    selectedDate
                             );
-
-                            editExpiryDate.setText(selectedDate);
                         },
                         year,
                         month,
@@ -113,12 +133,20 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void validateForm() {
+    private void validateAndSaveIngredient() {
         clearErrors();
 
-        String name = getText(editIngredientName);
-        String quantityText = getText(editQuantity);
-        String unit = getText(editUnit);
+        String name =
+                getText(editIngredientName);
+
+        String quantityText =
+                getText(editQuantity);
+
+        String unit =
+                getText(editUnit);
+
+        String expiryDate =
+                getText(editExpiryDate);
 
         boolean isValid = true;
 
@@ -160,10 +188,38 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             isValid = false;
         }
 
-        if (isValid) {
+        if (!isValid) {
+            return;
+        }
+
+        double quantity =
+                Double.parseDouble(quantityText);
+
+        Ingredient ingredient =
+                new Ingredient(
+                        name,
+                        quantity,
+                        unit,
+                        expiryDate
+                );
+
+        long ingredientId =
+                databaseHelper.addIngredient(
+                        ingredient
+                );
+
+        if (ingredientId != -1) {
             Toast.makeText(
                     this,
-                    "Ingredient details are valid",
+                    "Ingredient saved successfully",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            finish();
+        } else {
+            Toast.makeText(
+                    this,
+                    "Unable to save ingredient",
                     Toast.LENGTH_SHORT
             ).show();
         }
@@ -175,11 +231,22 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         layoutUnit.setError(null);
     }
 
-    private String getText(TextInputEditText input) {
+    private String getText(
+            TextInputEditText input
+    ) {
         if (input.getText() == null) {
             return "";
         }
 
-        return input.getText().toString().trim();
+        return input
+                .getText()
+                .toString()
+                .trim();
+    }
+
+    @Override
+    protected void onDestroy() {
+        databaseHelper.close();
+        super.onDestroy();
     }
 }
