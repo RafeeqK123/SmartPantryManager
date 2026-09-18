@@ -1,11 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Smart Pantry Manager</string>
 
+    <!-- Bottom navigation -->
     <string name="nav_pantry">Pantry</string>
     <string name="nav_recipes">Recipes</string>
     <string name="nav_settings">Settings</string>
 
+    <!-- Pantry screen -->
     <string name="pantry_heading">My Pantry</string>
     <string name="pantry_empty_message">Your pantry is empty.\nTap the add button to add your first ingredient.</string>
     <string name="add_ingredient">Add ingredient</string>
+
+    <!-- Add and edit ingredient screen -->
+    <string name="add_ingredient_title">Add Ingredient</string>
+    <string name="ingredient_details">Ingredient details</string>
+    <string name="ingredient_name_hint">Ingredient name</string>
+    <string name="quantity_hint">Quantity</string>
+    <string name="unit_hint">Unit (for example: kg, g, ml or items)</string>
+    <string name="expiry_date_hint">Expiry date (optional)</string>
+    <string name="save_ingredient">Save ingredient</string>
+
+    <!-- Ingredient card -->
+    <string name="ingredient_name_placeholder">Ingredient name</string>
+    <string name="quantity_placeholder">Quantity: 0 kg</string>
+    <string name="expiry_placeholder">Expiry date: Not provided</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
+    <!-- Suggested recipes screen -->
+    <string name="suggested_recipes_title">Suggested Recipes</string>
+    <string name="recipes_summary_placeholder">Recipes you can make with your pantry</string>
+    <string name="recipes_empty_message">No recipes match your pantry yet.\nAdd more ingredients or increase their quantities.</string>
+
+    <!-- Recipe card -->
+    <string name="recipe_name_placeholder">Recipe name</string>
+    <string name="recipe_description_placeholder">Recipe description</string>
+    <string name="ingredient_count_placeholder">0 required ingredients</string>
+    <string name="view_recipe">View recipe</string>
+
+    <!-- Recipe detail screen -->
+    <string name="recipe_details_title">Recipe Details</string>
+    <string name="required_ingredients">Required ingredients</string>
+    <string name="ingredient_list_placeholder">Ingredient list</string>
+    <string name="instructions">Instructions</string>
+    <string name="cooking_instructions_placeholder">Cooking instructions</string>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Settings</string>
+    <string name="pantry_data">Pantry data</string>
+    <string name="pantry_ingredient_count_placeholder">0 ingredients stored</string>
+    <string name="clear_pantry_explanation">Clearing the pantry permanently removes all saved ingredients from this device.</string>
+    <string name="clear_pantry">Clear pantry</string>
+    <string name="about">About</string>
+    <string name="version_name">Version 1.0</string>
+    <string name="about_description">Manage pantry ingredients and discover recipes that can be prepared using the food already available.</string>
+
 </resources>

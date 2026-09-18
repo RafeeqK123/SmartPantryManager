@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        android:title="Recipe Details"
+        android:title="@string/recipe_details_title"
         android:titleTextColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +38,7 @@
                 android:id="@+id/textDetailRecipeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Recipe name"
+                android:text="@string/recipe_name_placeholder"
                 android:textColor="@android:color/black"
                 android:textSize="26sp"
                 android:textStyle="bold" />
@@ -48,14 +48,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Recipe description"
+                android:text="@string/recipe_description_placeholder"
                 android:textSize="16sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:text="Required ingredients"
+                android:text="@string/required_ingredients"
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -66,14 +66,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:lineSpacingExtra="6dp"
-                android:text="Ingredient list"
+                android:text="@string/ingredient_list_placeholder"
                 android:textSize="16sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:text="Instructions"
+                android:text="@string/instructions"
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -85,7 +85,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="24dp"
                 android:lineSpacingExtra="6dp"
-                android:text="Cooking instructions"
+                android:text="@string/cooking_instructions_placeholder"
                 android:textSize="16sp" />
 
         </LinearLayout>

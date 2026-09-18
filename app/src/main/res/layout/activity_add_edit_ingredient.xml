@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        android:title="Add Ingredient"
+        android:title="@string/add_ingredient_title"
         android:titleTextColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:text="Ingredient details"
+                android:text="@string/ingredient_details"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -46,7 +46,7 @@
                 android:id="@+id/layoutIngredientName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Ingredient name">
+                android:hint="@string/ingredient_name_hint">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editIngredientName"
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Quantity">
+                android:hint="@string/quantity_hint">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editQuantity"
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Unit (for example: kg, g, ml or items)">
+                android:hint="@string/unit_hint">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editUnit"
@@ -94,7 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Expiry date (optional)">
+                android:hint="@string/expiry_date_hint">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editExpiryDate"
@@ -112,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:text="Save ingredient"
+                android:text="@string/save_ingredient"
                 android:textAllCaps="false"
                 android:textSize="16sp" />
 

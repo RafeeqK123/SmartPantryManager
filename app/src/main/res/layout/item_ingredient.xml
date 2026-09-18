@@ -23,7 +23,7 @@
             android:id="@+id/textIngredientName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ingredient name"
+            android:text="@string/ingredient_name_placeholder"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Quantity: 0 kg"
+            android:text="@string/quantity_placeholder"
             android:textSize="15sp" />
 
         <TextView
@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Expiry date: Not provided"
+            android:text="@string/expiry_placeholder"
             android:textSize="14sp" />
 
         <LinearLayout
@@ -56,7 +56,7 @@
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit"
+                android:text="@string/edit"
                 android:textAllCaps="false" />
 
             <com.google.android.material.button.MaterialButton
@@ -64,7 +64,7 @@
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Delete"
+                android:text="@string/delete"
                 android:textAllCaps="false"
                 android:textColor="#B3261E" />
 
