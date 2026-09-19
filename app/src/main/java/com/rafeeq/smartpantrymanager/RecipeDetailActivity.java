@@ -18,6 +18,8 @@ import java.util.List;
 public class RecipeDetailActivity
         extends AppCompatActivity {
 
+    private PantryDatabaseHelper databaseHelper;
+
     @Override
     protected void onCreate(
             Bundle savedInstanceState
@@ -28,6 +30,9 @@ public class RecipeDetailActivity
         setContentView(
                 R.layout.activity_recipe_detail
         );
+
+        databaseHelper =
+                new PantryDatabaseHelper(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(
                 findViewById(R.id.main),
@@ -119,8 +124,10 @@ public class RecipeDetailActivity
             return null;
         }
 
+        // This is the recipe information and required ingredients
+        // are read from the local SQLite database.
         List<Recipe> recipes =
-                RecipeRepository.getRecipes();
+                databaseHelper.getAllRecipes();
 
         for (Recipe recipe : recipes) {
             if (recipe.getName().equals(
@@ -164,5 +171,11 @@ public class RecipeDetailActivity
         }
 
         return ingredientList.toString().trim();
+    }
+
+    @Override
+    protected void onDestroy() {
+        databaseHelper.close();
+        super.onDestroy();
     }
 }

@@ -150,11 +150,13 @@ public class SuggestedRecipesActivity
     }
 
     private void loadMatchingRecipes() {
+        // This will oad pantry ingredients and seeded recipes
+        // from the local SQLite database.
         List<Ingredient> pantryIngredients =
                 databaseHelper.getAllIngredients();
 
         List<Recipe> allRecipes =
-                RecipeRepository.getRecipes();
+                databaseHelper.getAllRecipes();
 
         List<Recipe> matchingRecipes =
                 RecipeMatcher.findMatchingRecipes(
